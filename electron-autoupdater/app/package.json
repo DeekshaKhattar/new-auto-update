@@ -1,30 +1,57 @@
 {
   "name": "electron-app",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "My test electron app",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "nodemon --exec electron .",
-    "start": "electron .",
-    "dist": "electron-builder"
+    "start": "electron",
+    "build": "electron-builder"
   },
-  "repository": "https://github.com/cyrilgupta/electron-autoupdater",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DeekshaKhattar/new-auto-update.git"
+  },
   "publish": {
     "provider": "github",
     "releaseType": "release"
   },
   "build": {
     "appId": "com.coderjeet.autoupdater",
-    "productName": "Autoupdater app",
+    "productName": "Nexon",
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "icon": "assets/icon.ico"
     },
     "directories": {
       "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "package.json",
+      "index.html",
+      "assets/**/*",
+      "screens/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "build/system_health.py",
+        "to": "system_health.py"
+      }
+    ],
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "include": "installer.nsi"
+    },
+    "publish": {
+      "provider": "github",
+      "releaseType": "release"
     }
   },
-  "author": "CoderJeet",
+  "author": "Deeksha Khattar",
   "license": "ISC",
   "devDependencies": {
     "electron": "^19.0.9",
