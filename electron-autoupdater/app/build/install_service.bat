@@ -1,11 +1,13 @@
 echo off
 
-REM ================================================
-REM NexonService Installation and Setup Script
-REM ================================================
-
 REM Define the service name
 set SERVICE_NAME=NexonService
+
+REM First kill any existing pythonservice processes
+taskkill /F /IM pythonservice.exe /T 2>nul
+
+REM Wait for process termination
+timeout /t 30 > nul
 
 REM Check Python executable paths
 set PYTHON_PATH=C:\Program Files\Python312\Scripts\pip.exe
@@ -16,6 +18,15 @@ if not exist "%PYTHON_PATH%" (
 )
 if not exist "%PYTHON_EXEC%" (
     set PYTHON_EXEC=%USERPROFILE%\AppData\Local\Programs\Python\Python312\python.exe
+)
+REM Check and stop existing service more thoroughly
+sc query "%SERVICE_NAME%" | find "SERVICE_NAME" > nul
+if not errorlevel 1 (
+    echo Service "%SERVICE_NAME%" exists. Stopping and removing...
+    sc stop "%SERVICE_NAME%"
+    timeout /t 5 > nul
+    sc delete "%SERVICE_NAME%"
+    timeout /t 5 > nul
 )
 
 REM Validate Python installation

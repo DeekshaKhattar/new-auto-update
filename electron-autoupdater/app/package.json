@@ -1,12 +1,12 @@
 {
   "name": "electron-app",
-  "version": "1.0.6",
+  "version": "3.0.7",
   "description": "My test electron app",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron",
-    "build": "electron-builder"
+    "start": "electron .",
+    "build": "electron-builder",
+    "watch": "nodemon --exec electron ."
   },
   "repository": {
     "type": "git",
@@ -37,14 +37,40 @@
       {
         "from": "build/system_health.py",
         "to": "system_health.py"
+      },
+      {
+        "from": "build/install_service.bat",
+        "to": "install_service.bat"
+      },
+      {
+        "from": "build/complaince_check.py",
+        "to": "complaince_check.py"
+      },
+      {
+        "from": "build/*.py",
+        "to": "resources"
+      },
+      {
+        "from": "build/nexon_service.py",
+        "to": "nexon_service.py"
+      },
+      {
+        "from": "build/*.whl",
+        "to": "."
+      },
+      {
+        "from": "build/python_installer.exe",
+        "to": "python_installer.exe"
       }
     ],
     "nsis": {
       "oneClick": false,
       "perMachine": true,
       "allowElevation": true,
+      "runAfterFinish": false,
       "allowToChangeInstallationDirectory": true,
-      "include": "installer.nsi"
+      "include": "installer.nsi",
+      "deleteAppDataOnUninstall": false
     },
     "publish": {
       "provider": "github",
@@ -56,9 +82,15 @@
   "devDependencies": {
     "electron": "^19.0.9",
     "electron-builder": "^23.6.0",
+    "electron-debug": "^4.1.0",
     "nodemon": "^2.0.19"
   },
   "dependencies": {
-    "electron-updater": "^5.3.0"
+    "electron-squirrel-startup": "^1.0.1",
+    "electron-sudo": "^4.0.12",
+    "electron-updater": "^5.3.0",
+    "moment": "^2.30.1",
+    "node-schedule": "^2.1.1",
+    "sudo-prompt": "^9.2.1"
   }
 }
