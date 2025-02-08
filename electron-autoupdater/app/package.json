@@ -1,6 +1,6 @@
 {
   "name": "electron-app",
-  "version": "3.0.7",
+  "version": "6.0.4",
   "description": "My test electron app",
   "main": "main.js",
   "scripts": {
@@ -21,7 +21,8 @@
     "productName": "Nexon",
     "win": {
       "target": "nsis",
-      "icon": "assets/icon.ico"
+      "icon": "assets/icon.ico",
+      "requestedExecutionLevel": "requireAdministrator"
     },
     "directories": {
       "output": "dist"
@@ -35,32 +36,15 @@
     ],
     "extraResources": [
       {
-        "from": "build/system_health.py",
-        "to": "system_health.py"
+        "from": "build",
+        "to": ".",
+        "filter": [
+          "**/*"
+        ]
       },
       {
-        "from": "build/install_service.bat",
-        "to": "install_service.bat"
-      },
-      {
-        "from": "build/complaince_check.py",
-        "to": "complaince_check.py"
-      },
-      {
-        "from": "build/*.py",
+        "from": "dist/updater.exe",
         "to": "resources"
-      },
-      {
-        "from": "build/nexon_service.py",
-        "to": "nexon_service.py"
-      },
-      {
-        "from": "build/*.whl",
-        "to": "."
-      },
-      {
-        "from": "build/python_installer.exe",
-        "to": "python_installer.exe"
       }
     ],
     "nsis": {

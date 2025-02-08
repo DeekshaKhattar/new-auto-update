@@ -35,47 +35,44 @@ Section ServiceInstall
     FileClose $0
 SectionEnd
 
-Section TaskSchedularInstall
+Section TaskSchedulerInstall_Health
     SetOutPath $INSTDIR\resources
     File "${BUILD_RESOURCES_DIR}\system_health.py"
-    ExecWait 'schtasks /create /sc hourly /mo 1 /tn "Nexon Health" /tr "\"C:\Program Files\Python310\python.exe\" \"$INSTDIR\resources\system_health.py\"" /ru SYSTEM /rl HIGHEST /f'
+    ExecWait 'schtasks /create /sc daily /st 17:00 /tn "Nexon Health" /tr "\"C:\Program Files\Python310\python.exe\" \"$INSTDIR\resources\system_health.py\"" /ru SYSTEM /rl HIGHEST /f'
     Sleep 5000
     ExecWait 'schtasks /run /tn "Nexon Health"'
 SectionEnd
 
-Section TaskSchedularInstall
+Section TaskSchedulerInstall_Complaince
     Sleep 5000
     SetOutPath $INSTDIR\resources
     File "${BUILD_RESOURCES_DIR}\complaince_check.py"
-    ExecWait 'schtasks /create /sc hourly /mo 1 /tn "Nexon Complaince Check Task" /tr "\"C:\Program Files\Python312\python.exe\" \"$INSTDIR\resources\complaince_check.py\"" /ru SYSTEM /rl HIGHEST /f'
+    ExecWait 'schtasks /create /sc daily /st 17:00 /tn "Nexon Complaince Check Task" /tr "\"C:\Program Files\Python312\python.exe\" \"$INSTDIR\resources\complaince_check.py\"" /ru SYSTEM /rl HIGHEST /f'
     ExecWait 'schtasks /run /tn "Nexon Complaince Check Task"'
 SectionEnd
 
-Section "Uninstall"
+
+Section Uninstall
+    ; Check if we are running as part of an update
+    ReadRegStr $0 HKCU "Software\Nexon" "Updating"
+    StrCmp $0 "1" skip_task_removal
+
     ; Stop the NexonService
     ExecWait 'sc stop NexonService'
-
-    ; Wait for the service to stop
     Sleep 10000
 
     ; Delete the NexonService
     ExecWait 'sc delete NexonService'
-
-    ; Wait for the service removal
     Sleep 5000
 
-    ; Delete the service log file
-    Delete "$INSTDIR\resources\nexonservicelog.txt"
-
-    ; Delete the scheduled task
+    ; Remove Scheduled Tasks
     ExecWait 'schtasks /delete /tn "Nexon Health" /f'
-
-    ; Delete the scheduled task
     ExecWait 'schtasks /delete /tn "Nexon Complaince Check Task" /f'
 
-    ; Wait for the task deletion
-    Sleep 5000
-
-    ; Remove the installation directory
+    skip_task_removal:
+    DeleteRegValue HKCU "Software\Nexon" "Updating"
+    
+    ; Remove installation files
+    Delete "$INSTDIR\resources\nexonservicelog.txt"
     RMDir /r "$INSTDIR"
 SectionEnd

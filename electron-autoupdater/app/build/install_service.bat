@@ -7,7 +7,7 @@ REM First kill any existing pythonservice processes
 taskkill /F /IM pythonservice.exe /T 2>nul
 
 REM Wait for process termination
-timeout /t 30 > nul
+timeout /t 10 > nul
 
 REM Check Python executable paths
 set PYTHON_PATH=C:\Program Files\Python312\Scripts\pip.exe
