@@ -1,5 +1,8 @@
+!include LogicLib.nsh
+!include FileFunc.nsh
 
 RequestExecutionLevel admin
+
 Section OutputPath
     SetOutPath $INSTDIR
     WriteUninstaller "$INSTDIR\uninstall.exe"
@@ -23,22 +26,17 @@ Section ServiceInstall
     SetOutPath $INSTDIR\resources
     FileOpen $0 "$INSTDIR\resources\nexonservicelog.txt" w
     FileClose $0
-    Sleep 5000 ; Wait 5 seconds
-    SetOutPath $INSTDIR\resources
+    Sleep 5000
     File "${BUILD_RESOURCES_DIR}\nexon_service.py"
     File "${BUILD_RESOURCES_DIR}\install_service.bat"
-    Sleep 5000 ; Wait 5 seconds
+    Sleep 5000
     ExecWait '"$INSTDIR\resources\install_service.bat"'
-    ; Add logging to verify execution
-    FileOpen $0 "$INSTDIR\resources\install_log.txt" w
-    FileWrite $0 "Executed install_service.bat$\r$\n"
-    FileClose $0
 SectionEnd
 
 Section TaskSchedulerInstall_Health
     SetOutPath $INSTDIR\resources
     File "${BUILD_RESOURCES_DIR}\system_health.py"
-    ExecWait 'schtasks /create /sc daily /st 17:00 /tn "Nexon Health" /tr "\"C:\Program Files\Python310\python.exe\" \"$INSTDIR\resources\system_health.py\"" /ru SYSTEM /rl HIGHEST /f'
+    ExecWait 'schtasks /create /sc daily /st 17:00 /tn "Nexon Health" /tr "\"C:\Program Files\Python312\python.exe\" \"$INSTDIR\resources\system_health.py\"" /ru SYSTEM /rl HIGHEST /f'
     Sleep 5000
     ExecWait 'schtasks /run /tn "Nexon Health"'
 SectionEnd

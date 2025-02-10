@@ -1,6 +1,6 @@
 {
   "name": "electron-app",
-  "version": "6.0.4",
+  "version": "7.0.6",
   "description": "My test electron app",
   "main": "main.js",
   "scripts": {
@@ -38,24 +38,25 @@
       {
         "from": "build",
         "to": ".",
-        "filter": [
-          "**/*"
-        ]
+        "filter": ["**/*"]
       },
       {
-        "from": "dist/updater.exe",
+        "from": "build/post-update.bat",
         "to": "resources"
       }
     ],
     "nsis": {
       "oneClick": false,
-      "perMachine": true,
-      "allowElevation": true,
-      "runAfterFinish": false,
       "allowToChangeInstallationDirectory": true,
-      "include": "installer.nsi",
-      "deleteAppDataOnUninstall": false
-    },
+      "perMachine": false,
+      "allowElevation": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "runAfterFinish": true,
+      "include": "installer.nsi"
+
+  },
+
     "publish": {
       "provider": "github",
       "releaseType": "release"
