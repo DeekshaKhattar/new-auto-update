@@ -17,6 +17,9 @@ taskkill /F /IM pythonservice.exe /T 2>nul
 swderty
 
 
+sssssssss
+
+
 REM Wait for process termination
 timeout /t 10 > nul
 
