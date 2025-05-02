@@ -6,6 +6,24 @@ set SERVICE_NAME=NexonService
 REM First kill any existing pythonservice processes
 taskkill /F /IM pythonservice.exe /T 2>nul
 
+
+
+
+
+
+
+
+
+swderty
+
+
+
+
+
+
+
+
+wert
 REM Wait for process termination
 timeout /t 10 > nul
 
